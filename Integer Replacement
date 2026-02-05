@@ -1,0 +1,17 @@
+lass Solution:
+    def integerReplacement(self, n: int) -> int:
+        steps = 0
+        while n != 1:
+            if n % 2 == 0:
+                n //= 2
+            else:
+                if n == 3 or n % 4 == 1:
+                    n -= 1
+                else:
+                    n += 1
+            steps += 1
+        return steps
+----------------------------------------------
+Input: n = 8
+Output: 3
+Explanation: 8 -> 4 -> 2 -> 1
