@@ -1,0 +1,13 @@
+class Solution:
+    def largestPalindrome(self, n: int) -> int:
+        if n == 1:
+            return 9
+        upper = 10**n -1
+        lower=10**(n-1)
+        for left in range(upper,lower - 1,-1):
+            pal = int(str(left) + str(left)[::-1])
+            for x in range(upper,int(pal**0.5),-1):
+                if pal % x == 0:
+                    y=pal // x
+                    if lower <= y <= upper:
+                        return pal % 1337
