@@ -1,0 +1,23 @@
+from functools import lru_cache
+from typing import List
+class Solution:
+    def diffWaysToCompute(self, expression: str) -> List[int]:
+        @lru_cache(None)
+        def compute(expr: str) -> List[int]:
+            results = []          
+            for i, ch in enumerate(expr):
+                if ch in "+-*":
+                    left_results = compute(expr[:i])
+                    right_results = compute(expr[i+1:])                
+                    for l in left_results:
+                        for r in right_results:
+                            if ch == '+':
+                                results.append(l + r)
+                            elif ch == '-':
+                                results.append(l - r)
+                            else:  # '*'
+                                results.append(l * r)
+            if not results:
+                return [int(expr)]
+            return results      
+        return compute(expression)
