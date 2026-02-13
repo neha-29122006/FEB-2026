@@ -1,0 +1,17 @@
+from typing import List
+class Solution:
+    def specialGrid(self, n: int) -> List[List[int]]:
+        if n == 0:
+            return [[0]]    
+        prev = self.specialGrid(n - 1)
+        m = len(prev)
+        size = m * 2
+        total = m * m       
+        grid = [[0] * size for _ in range(size)]      
+        for i in range(m):
+            for j in range(m):
+                grid[i][j + m] = prev[i][j]
+                grid[i + m][j + m] = prev[i][j] + total
+                grid[i + m][j] = prev[i][j] + 2 * total
+                grid[i][j] = prev[i][j] + 3 * total 
+        return grid
