@@ -1,0 +1,105 @@
+from queue import PriorityQueue
+# Manhattan Distance
+def h(state, goal):
+    dist = 0
+    for num in range(1, 9):
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] == num:
+                    x1, y1 = i, j
+                if goal[i][j] == num:
+                    x2, y2 = i, j
+        dist += abs(x1 - x2) + abs(y1 - y2)
+    return dist
+
+
+def solve(start, goal):
+    pq = PriorityQueue()
+    pq.put((h(start, goal), 0, start, []))
+    visited = set()
+
+    while not pq.empty():
+        f, g, state, path = pq.get()
+
+        if state == goal:
+            return path
+
+        visited.add(tuple(map(tuple, state)))
+
+        # find blank
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] == 0:
+                    x, y = i, j
+
+        # moves
+        directions = [(-1,0,"Up"), (1,0,"Down"),
+                      (0,-1,"Left"), (0,1,"Right")]
+
+        for dx, dy, move in directions:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < 3 and 0 <= ny < 3:
+                new = [row[:] for row in state]
+                new[x][y], new[nx][ny] = new[nx][ny], new[x][y]
+
+                t = tuple(map(tuple, new))
+                if t not in visited:
+                    pq.put((g+1 + h(new, goal),
+                            g+1,
+                            new,
+                            path + [move]))
+
+    return None
+
+
+# ---------------- MAIN ----------------
+print("Enter start state (use 0 for blank):")
+start = [list(map(int, input().split())) for _ in range(3)]
+
+print("Enter goal state (use 0 for blank):")
+goal = [list(map(int, input().split())) for _ in range(3)]
+
+solution = solve(start, goal)
+
+if solution:
+    print("\nSolution found!")
+    print("Number of moves:", len(solution))
+    print("Moves:", solution)
+else:
+    print("No solution exists.")
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+water-jug
+from collections import deque
+def water(j1,j2,goal):
+    que=deque([((0,0),[])])
+    vs=set()
+    while que:
+        (a,b),path=que.popleft()
+        if (a,b) in vs:
+            continue
+        vs.add((a,b))
+        path=path+[(a,b)]
+        if a==goal or b==goal:
+            return path
+        new_state=[(j1,b),(a,j2),(0,b),(a,0)]
+        pour=min(a,j2-b)
+        new_state.append((a-pour,b+pour))
+        pour1=min(j1-a,b)
+        new_state.append((a+pour1,b-pour1))
+        for state in new_state:
+            if state not in vs:
+                que.append((state,path))
+    return None
+        
+
+
+j1=int(input("enter:"))
+j2=int(input("enter:"))
+goal=int(input("enter:"))
+sol=water(j1,j2,goal)
+if sol:
+    for val in sol:
+        print(val)
+else:
+    print("not")
