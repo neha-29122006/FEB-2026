@@ -1,0 +1,31 @@
+import java.util.*;
+class Solution {
+    public int[] smallestRange(List<List<Integer>> nums) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+            (a, b) -> a[0] - b[0]
+        );
+        int currentMax = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.size(); i++) {
+            int val = nums.get(i).get(0);
+            pq.offer(new int[]{val, i, 0});
+            currentMax = Math.max(currentMax, val);
+        }
+        int start = 0, end = Integer.MAX_VALUE;
+        while (pq.size() == nums.size()) {
+            int[] cur = pq.poll();
+            int minVal = cur[0];
+            int listIndex = cur[1];
+            int elemIndex = cur[2];
+            if (currentMax - minVal < end - start) {
+                start = minVal;
+                end = currentMax;
+            }
+            if (elemIndex + 1 < nums.get(listIndex).size()) {
+                int nextVal = nums.get(listIndex).get(elemIndex + 1);
+                pq.offer(new int[]{nextVal, listIndex, elemIndex + 1});
+                currentMax = Math.max(currentMax, nextVal);
+            }
+        }
+        return new int[]{start, end};
+    }
+}
