@@ -1,0 +1,19 @@
+lass Solution:
+    def maxUniqueSplit(self, s: str) -> int:
+        used = set()
+        self.ans = 0
+        n = len(s)
+        def backtrack(start: int):
+            if len(used) + (n - start) <= self.ans:
+                return
+            if start == n:
+                self.ans = max(self.ans, len(used))
+                return
+            for end in range(start + 1, n + 1):
+                substring = s[start:end]
+                if substring not in used:
+                    used.add(substring)
+                    backtrack(end)
+                    used.remove(substring)
+        backtrack(0)
+        return self.ans
